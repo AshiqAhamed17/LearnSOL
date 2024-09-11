@@ -1,4 +1,4 @@
-import * as web3 from "@solana/web3.js";
+/*import * as web3 from "@solana/web3.js";
 import "dotenv/config"; // To read from .env file
 
 // Function to get Keypair from secret key in .env
@@ -31,7 +31,7 @@ async function airdropIfRequired(connection, publicKey, amount, minBalance) {
 // Entry point of the script
 (async () => {
   try {
-    const payer = getKeypairFromSecretKey('SECRET_KEY'); // SECRET_KEY from .env
+    const payer = getKeypairFromSecretKey('SECRET_KEY2'); // SECRET_KEY from .env
     const connection = new web3.Connection(web3.clusterApiUrl('devnet')); // Connect to Solana devnet
     
     // Airdrop SOL if balance is below 0.5 SOL
@@ -46,4 +46,33 @@ async function airdropIfRequired(connection, publicKey, amount, minBalance) {
   } catch (error) {
     console.error("Error occurred:", error);
   }
-})();
+})(); */
+
+import {
+  Connection,
+  Transaction,
+  SystemProgram,
+  sendAndConfirmTransaction,
+  PublicKey,
+} from "@solana/web3.js";
+import "dotenv/config";
+import { getKeypairFromEnvironment } from "@solana-developers/helpers";
+ 
+const suppliedToPubkey = process.argv[2] || null;
+ 
+if (!suppliedToPubkey) {
+  console.log(`Please provide a public key to send to`);
+  process.exit(1);
+}
+ 
+const senderKeypair = getKeypairFromEnvironment("SECRET_KEY");
+ 
+console.log(`suppliedToPubkey: ${suppliedToPubkey}`);
+ 
+const toPubkey = new PublicKey(suppliedToPubkey);
+ 
+const connection = new Connection("https://api.devnet.solana.com", "confirmed");
+ 
+console.log(
+  `✅ Loaded our own keypair, the destination public key, and connected to Solana`,
+);
